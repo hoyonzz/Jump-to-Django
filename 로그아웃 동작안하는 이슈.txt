@@ -1,0 +1,13 @@
+- 로그아웃 기능을 구현했지만, 405 오류로 작동하지 않음.
+원인 : 로그아웃 링크를 a태그로 GET방식으로 요청을 보냄
+해결방법 : POST방식인 form태그로 교체하고 csrf_token삽입
+구현 코드
+                    <form id="logout-form" method="post" action="{% url 'common:logout' %}">
+                        {% csrf_token %}
+                        <a class="nav-link" href="javascript:void(0);" onclick="document.getElementById('logout-form').submit();" style="cursor: pointer;">{{ user.username }} (로그아웃)</a>
+                    </form>
+
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-link">로그아웃</button>
+</form>
