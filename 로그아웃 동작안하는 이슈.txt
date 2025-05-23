@@ -7,7 +7,7 @@
                         <a class="nav-link" href="javascript:void(0);" onclick="document.getElementById('logout-form').submit();" style="cursor: pointer;">{{ user.username }} (로그아웃)</a>
                     </form>
 
-<form action="{% url 'logout' %}" method="post">
+<form action="{% url 'common:logout' %}" method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-link">로그아웃</button>
+    <button type="submit" class="btn btn-link">{{ user.username }} (로그아웃)</button>
 </form>
