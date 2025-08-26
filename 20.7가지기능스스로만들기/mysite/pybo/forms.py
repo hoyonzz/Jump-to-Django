@@ -1,13 +1,19 @@
 from django import forms
-from .models import Question, Answer, Comment
+from .models import Question, Answer, Comment, Category
 
 
 
 class QuestionForm(forms.ModelForm):
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=True,
+        label='게시판'
+    )
     class Meta:
         model = Question
-        fields = ['subject', 'content']
+        fields = ['category', 'subject', 'content']
         labels = {
+            'category': '카테고리',
             'subject': '제목',
             'content': '내용',
         }

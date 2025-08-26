@@ -28,4 +28,18 @@
         <button type="submit" class="btn btn-primary">저장하기</button>
     </form>
 </div>
+<form id="answerSortForm" method="get" action="{% url 'pybo:detail' question.id %}">
+    <input type="hidden" name="page" id="answer_page" value="{{ answer_list.number }}">
+    <input type="hidden" aria-multiline="sort" id="answer_sort" value="{{ sort }}">
+</form>
+{% block script %}
+<script>
+$(document).ready(function(){
+    $("#answerSortSelect").on('change', function(){
+        $("#answer_sort").val($(this).val());
+        $("#answer_page").val(1);  // 정렬 변경 시 무조건 1페이지로 초기화
+        $("#answerSortForm").submit();
+      });
+    });
+</script>
 {% endblock %}

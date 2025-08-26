@@ -1,5 +1,9 @@
 <!-- 네비게이션바 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <a href="{% url 'pybo:index' }">전체</a>
+    {% for cat in category_list %}
+        <a href="{% url 'pybo:category_question_list' cat.id %}">{{ cat.name }}</a>
+    {% endfor %}
     <a class="navbar-brand" href="{% url 'pybo:index' %}">Pybo</a>
     <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
         data-target="#navbarNav" aria-controls="navbarNav"
