@@ -11,7 +11,11 @@
     {% endfor %}
     </div>
     {% endif %}
-    <h2 class="border-bottom py-2">{{ question.subject }}</h2>
+    <!-- 제목,카테고리 영역 -->
+    <div class="d-flex align-items-center border-bottom py-2 mb-3">
+        <h2 class="mb-0">{{ question.subject }}</h2>
+        <span class="badge badge-secondary ml-3">{{ question.category.name }}</span>
+    </div>
     <div class="row my-3">
         <div class="col-1">
             <!-- 추천 영역 -->

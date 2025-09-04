@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 from ..forms import QuestionForm
-from ..models import Question
+from ..models import Question, Category
 
 
 
@@ -23,7 +23,8 @@ def question_create(request):
     
     else:
         form = QuestionForm()
-    context = {'form':form}
+    categories = Category.objects.all()
+    context = {'form':form, 'categories':categories}
     return render(request, 'pybo/question_form.html', context)
 
 @login_required(login_url='common:login')
@@ -45,7 +46,9 @@ def question_modify(request, question_id):
             return redirect('pybo:detail', question_id=question.id)
     else:
         form = QuestionForm(instance=question)
-    context = {'form':form}
+
+    categories = Category.objects.all()
+    context = {'form':form, 'categories':categories}
     return render(request, 'pybo/question_form.html', context)
 
 @login_required(login_url='common:login')

@@ -5,7 +5,17 @@
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>    
     </button>
+
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+        <!-- 카테고리 메뉴 -->
+        <ul class="navbar-nav mr-auto">
+            {% for cat in categories %}
+            <li class="nav-item">
+                <a class="nav-link{% if category and category.id == cat.id %} active {% endif %}" href="{% url 'pybo:index_by_category' cat.id %}">{{ cat.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        
         <ul class="navbar-nav">
             <li class="nav-item">
                 {% if user.is_authenticated %}

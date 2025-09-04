@@ -2,17 +2,26 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, Count
 
-from ..models import Question, Answer
+from ..models import Question, Answer, Category
 
 
 
-def index(request):
+def index(request, category_id=None):
     # pybo 목록 출력
 
     # 입력 인자
     page = request.GET.get('page', '1') # 페이지
     kw = request.GET.get('kw', '') # 검색어
     so = request.GET.get('so', 'recent') # 정렬 기준
+
+    # 전체 카테고리 목록 조회
+    categories = Category.objects.all()
+
+    # 선택된 카테고리 객체 가져오기(없다면 None)
+    if category_id:
+        category = get_object_or_404(Category, pk=category_id)
+    else:
+        category = None
 
     # 정렬
     if so == 'recommend':
@@ -23,6 +32,10 @@ def index(request):
             num_answer=Count('answer')).order_by('-num_answer', '-create_date')
     else: # recent
         question_list = Question.objects.order_by('-create_date')
+
+    # 카테고리별 필터링(category_id 있으면 해당 카테고리만)
+    if category:
+        question_list = question_list.filter(category=category)
 
     # 조회
     if kw:
@@ -37,7 +50,7 @@ def index(request):
     paginator = Paginator(question_list, 10) # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
 
-    context = {'question_list':page_obj, 'page': page, 'kw':kw, 'so': so}
+    context = {'question_list':page_obj,'categories':categories, 'category':category, 'page': page, 'kw':kw, 'so': so}
     return render(request, 'pybo/question_list.html', context)
 
 def detail(request, question_id):
