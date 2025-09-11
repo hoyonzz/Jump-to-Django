@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, Count
 
-from ..models import Question, Answer, Category
+from ..models import Question, Answer, Category, QuestionView
 
 
 
@@ -62,6 +62,16 @@ def detail(request, question_id):
 
     # 조회
     question = get_object_or_404(Question, pk=question_id)
+    ip = get_client_ip(request)
+
+    # 이미 조회한 적이 있는지 확인하기
+    if not QuestionView.objects.filter(question=question, ip_address=ip).exists():
+        # 처음 조회하는 경우에만 죄후 증가
+        question.views += 1
+        question.save(update_fields = ['views'])
+
+        # 조회 기록 저장
+        QuestionView.objects.create(question=question, ip_address=ip)
 
     # 정렬
     if so == 'recommend':
@@ -79,3 +89,13 @@ def detail(request, question_id):
 
     context = {'question': question, 'answer_list':page_obj, 'so':so}
     return render(request, 'pybo/question_detail.html', context)
+
+def get_client_ip(request):
+    # 클라이언트 IP주소를 가져오는 함수
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
