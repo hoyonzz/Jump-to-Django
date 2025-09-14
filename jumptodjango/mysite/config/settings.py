@@ -159,6 +159,6 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 # 이메일 관련 설정
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
+# 가입시 필수 입력 필드
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
